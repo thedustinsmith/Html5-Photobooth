@@ -1,0 +1,29 @@
+body {
+background-color: #eee;  
+}
+video {
+	width: 500px;
+	box-shadow: 0 0 20px #111;
+	margin: 20px auto;
+}
+
+#pic-holder {
+ position:relative;
+  margin-top:50px;
+}
+#pic-holder .pic-wrap {
+  width: 300px;
+  height: 280px;
+  box-shadow: 0 0 20px #777;
+  border: 1px solid #333;
+  padding-bottom: 50px;
+  padding:5px;
+  position:absolute;
+  top:25px;
+  left: 10px;
+  background-color:white;
+}
+#pic-holder img {	
+	-webkit-filter: sepia(1);
+    width:300px;
+}
