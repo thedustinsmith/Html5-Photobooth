@@ -10,15 +10,21 @@
 <link rel="Stylesheet" href="style.css" />
 </head>
 <body>
-  <div style="width: 50%; float:left;">
-	<video autoplay id="video-element"></video>
-	<div id='actions'>
-      <a href="#" id="take-pic">Take Picture</a>
-      <a href="#" id="add-mustache">Add Mustache</a>
-	</div>
+  <div style="clear:both;">
+    <div style="width: 50%; float:left;">
+      <div id="video-container"></div>
+  	<div id='actions'>
+        <a href="#" id="take-pic">Take Picture</a>
+        <a href="#" id="add-mustache">Add Mustache</a>
+  	</div>
+    </div>
+    <div style="width: 50%; float: left;">
+      <div id="pic-holder"></div>
+    </div>
   </div>
-  <div style="width: 50%; float: left;">
-    <div id="pic-holder"></div>
-  </div>
+  <table>
+    <tr><th>Width</th><td id="debug-width"></td></tr>
+    <tr><th>Height</th><td id="debug-height"></td></tr>
+  </table>
 </body>
 </html>

@@ -1,19 +1,18 @@
 var Camera = function(opts){
 	var defaults = {
-		initError: $.noop,
-		init: $.noop
+		container: $("<div id='camera-wrapper' />"),
+		width: 640,
+		height: 480,
+		onInitError: $.noop,
+		onInit: $.noop
 	};
 	
 	var options = $.extend({}, defaults, opts);
-
 	var supportsUserMedia = !!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
-
 	if (!supportsUserMedia) {
 		options.initError("Device does not support user media");
 		return;
 	} 
-
-	var customGetUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
 
 	if (!navigator.getUserMedia && navigator.webkitGetUserMedia) {
 		navigator.getUserMedia = navigator.webkitGetUserMedia;
@@ -30,31 +29,68 @@ var Camera = function(opts){
 	}
 
 	var stream;
+	var videoElement = document.createElement("video");
+	var videoCanvas = document.createElement("canvas");
+	var videoContext = videoCanvas.getContext('2d');
 	var pictureCanvas = document.createElement("canvas");
 	var pictureContext = pictureCanvas.getContext('2d');
 
-	navigator.getUserMedia({video: true, audio: false}, function(sourceStream) {
-		stream = sourceStream;
-		options.init(sourceStream);
-	}, function(e) {
-		options.initError('Permission to camera denied');
-	});
-
-	this.takePicture = function(video, filter) {
-		if(!stream){
+	var updateCallback = function () {
+		if (videoElement.paused || videoElement.ended) {
 			return;
 		}
 
-		$(pictureCanvas).attr("width", $(video).css('width')).attr("height", $(video).css("height"));
-		pictureContext.drawImage(video, 0, 0);
+		var w = videoCanvas.width,
+			h = videoCanvas.height;
+		$("#debug-width").html(w);
+		$("#debug-height").html(h);
+		videoContext.drawImage(videoElement, 0, 0);
 
-		if (filter) {
-			filter(pictureContext, {});
+		setTimeout(function() {
+			updateCallback();
+		}, 0);
+	};
+
+	var container = $(options.container);
+	if (!container.closest('html').length) {
+		$("body").append(container);
+	}
+
+	container.append($(videoCanvas));
+	videoCanvas.width = options.width;
+	videoCanvas.height = options.height;
+	videoElement.autoplay = true;
+
+	navigator.getUserMedia({video: true, audio: false}, function(sourceStream) {
+		$(videoElement).attr("src", window.URL.createObjectURL(sourceStream));
+		//options.onInit(sourceStream);
+	}, function(e) {
+		options.onInitError('No access to camera');
+	});
+
+	videoElement.addEventListener("play", function(){
+		updateCallback();
+	});
+
+	this.takePicture = function(source, filter, callback) {
+		if (!source) {
+			return;
 		}
 
-		var picUrl = pictureCanvas.toDataURL('image/png');
+		var h = $(source).css("height"),
+			w = $(source).css("width");
+		$(pictureCanvas).attr("width", w).attr("height", h);
+		pictureContext.drawImage(source, 0, 0);
 
-		return picUrl;
+		if (filter) {
+			filter(pictureContext, {x: -100, y: -100}, function() {
+				var picUrl = pictureCanvas.toDataURL('image/png');		
+				callback(picUrl);
+			});
+		} else {
+			var picUrl = pictureCanvas.toDataURL('image/png');
+			callback(picUrl);
+		}
 	};
 
 	return this;

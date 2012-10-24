@@ -1,14 +1,13 @@
 var Filters = {
-	mustache: function (context, opts) {
-		var x = opts.x || 0;
-		var y = opts.y || 0;
+	mustache: function(ctx, callback) {
+		var x = 150,
+			y = 200,
+			img = new Image();
 
-		var img = new Image();
 		img.src = 'mustache.png';
-		img.width = 200;
 		img.onload = function() {
-			console.log()
-			context.drawImage(img, x, y);
+			ctx.drawImage(img, x, y);
+			callback();
 		};
 	}
 };

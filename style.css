@@ -1,7 +1,7 @@
 body {
 background-color: #eee;  
 }
-video {
+#video-container {
 	width: 500px;
 	box-shadow: 0 0 20px #111;
 	margin: 20px auto;
