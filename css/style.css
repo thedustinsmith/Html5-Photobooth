@@ -1,0 +1,50 @@
+body {
+  background-color: #eee;  
+}
+.navbar h2.brand {
+  padding: 0;
+  margin: 0;
+}
+#main {
+  margin-top:50px;
+}
+#main .span6 {
+  width: 450px;
+}
+#video-container {
+	box-shadow: 0 0 20px #111;
+	margin: 20px auto;
+  position:relative;
+}
+#video-container canvas {
+  width: 100%;
+}
+#pic-holder {
+ position:relative;
+  margin-top:50px;
+}
+#pic-holder .pic-wrap {
+  width: 300px;
+  height: 280px;
+  box-shadow: 0 0 20px #777;
+  border: 1px solid #333;
+  padding-bottom: 50px;
+  padding:5px;
+  position:absolute;
+  top:25px;
+  left: 100px;
+  background-color:white;
+}
+#pic-holder img {	
+	-webkit-filter: sepia(1);
+    width:300px;
+}
+#counter {
+  font-size:100px;
+  color: white;
+  text-shadow: 0 0 5px #111;
+  text-align: center;
+  padding-top: 35%;
+  position:absolute;
+  top:0; bottom: 0; left: 0; right: 0;
+}
