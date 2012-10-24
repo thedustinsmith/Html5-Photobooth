@@ -42,7 +42,7 @@ body {
 #counter {
   font-size:100px;
   color: white;
-  text-shadow: 0 0 5px #111;
+  text-shadow: 5px 5px 5px #111;
   text-align: center;
   padding-top: 35%;
   position:absolute;
