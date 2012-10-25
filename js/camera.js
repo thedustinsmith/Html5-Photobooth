@@ -4,11 +4,12 @@ var Camera = function(opts){
 		width: 640,
 		height: 480,
 		scale: 1,
+		mirror: true,
 		onInitError: $.noop,
 		onInit: $.noop
 	};
 	
-	var options = $.extend({}, defaults, opts);
+	this.options = options = $.extend({}, defaults, opts);
 	var supportsUserMedia = !!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
 	if (!supportsUserMedia) {
 		options.initError("Device does not support user media");
@@ -45,23 +46,41 @@ var Camera = function(opts){
 	videoCanvas.height = options.height;
 	videoElement.autoplay = true;
 
+	var last = 0;
+	var refreshRate = $("#refresh-rate");
+	var debugMirror = $("#debug-mirror");
+	var paused = false;
+	var first = true;
 	var updateCallback = function () {
-		if (videoElement.paused || videoElement.ended) {
+		if (paused || videoElement.paused || videoElement.ended) {
 			return;
 		}
 
-		var w = videoCanvas.width,
-			h = videoCanvas.height;
-		$("#debug-width").html(w);
-		$("#debug-height").html(h);
-		videoContext.drawImage(videoElement, 0, 0, w, h);
+		refreshRate.html(Date.now() - last);
+		last = Date.now();
 
+		if(!first) {
+			videoContext.save();
+		}
+
+		if (options.mirror) {
+			debugMirror.html("yep");
+			videoContext.scale(-1, 1);
+			videoContext.translate(-1 * videoElement.width, 0);
+		}
+		else {
+			debugMirror.html("nope");
+		}
+		videoContext.drawImage(videoElement, 0, 0);
+		videoContext.restore();
+		first = false;
 		setTimeout(function() {
 			updateCallback();
 		}, 0);
 	};
 
 	navigator.getUserMedia({video: true, audio: false}, function(sourceStream) {
+		sourceStream;
 		$(videoElement).attr("src", window.URL.createObjectURL(sourceStream));
 		//options.onInit(sourceStream);
 	}, function(e) {
@@ -69,12 +88,25 @@ var Camera = function(opts){
 	});
 
 	videoElement.addEventListener("play", function(){
+		last = Date.now();
 		updateCallback();
 	});
 
 	this.takePicture = function (filter, callback) {
 		callback(videoCanvas.toDataURL('image/png'));
 	};
+
+	this.setOption = function (option, value) {
+		this.options[option] = value;
+	};
+
+	this.pause = function(){
+		paused = true;
+	};
+
+	this.play = function() {
+		paused = false;
+	}
 
 	return this;
 };

@@ -4,6 +4,8 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/0.5.2/lodash.min.js"></script>
 <title>My Camera</title>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/filer.js"></script>
 <script src="js/camera.js"></script>
 <script src="js/filters.js"></script>
 <script src="js/script.js"></script>
@@ -16,8 +18,10 @@
       <div class="container">
         <h2 class="brand">Html5 Photobooth</h1>
 
-        <a id="take-pic" class="btn btn-primary pull-right">Take Picture</a>
+        <a id="record-vid" class="btn btn-success pull-right">Start Recording</a>
+        <a id="stop-record-vid" class="btn btn-danger pull-right">Stop Recording</a>
 
+        <a id="take-pic" class="btn btn-primary pull-right">Take Picture</a>
       </div>
     </div>
   </div>
@@ -35,7 +39,16 @@
     </div>
   </div>
   <div class="container">
-
+    <table>
+      <tr>
+        <th>Refresh Rate:</th>
+        <td id="refresh-rate"><td>
+      </tr>
+      <tr>
+        <th>Mirroing:</th>
+        <td id="debug-mirror"><td>
+      </tr>
+    </table>
   </div>
 
 
