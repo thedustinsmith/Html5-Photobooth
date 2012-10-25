@@ -38,7 +38,12 @@ $(function() {
 		})
 	});
 
-	var currentVid = [];
+
+	/* Video stuff 
+	* I have it taking pictures for frames, and then I'm getting blobs from those data urls
+	* I'm then trying to concatenate those blobs into a buffer, but apparently that's not going to work
+	*/
+	/*var currentVid = [];
 	var isRecording = false;
 	function record(frame) {
 		if (!isRecording) {
@@ -54,7 +59,7 @@ $(function() {
 	};
 
 	function convertImagesToVideo (frames, callback) {
-		var buffer = [];
+		var buffer = new Uint8Array(0);
 		var blobs = [];
 		var reader = new FileReader();
 		reader.onerror = function(er) {
@@ -68,18 +73,19 @@ $(function() {
 		};
 		reader.onloadend = function (bytes) {
 			console.log(bytes);
-		};		
+		};
 
 		for(var frame in frames) {
-			var b = Util.dataURLToBlob(frame);
-			blobs.push(b);
+			var b = Util.dataURLToBlob(frames[frame]);
+
+			var isLast = frame === frames.length - 1;
+			Util.fileToArrayBuffer(b, function(h) {
+				buffer = buffer.concat(h);
+				//callback(buffer);
+			});
 		}
-		console.log(blobs);
-		for(var b in blobs) {
-			console.log("in this thing");
-			reader.readAsArrayBuffer(b);
-		}
-		callback();
+
+		setTimeout(function() { callback(buffer) }, 5000);
 	};
 
 	$("#record-vid").on('click', function (e) {
@@ -90,8 +96,15 @@ $(function() {
 		});
 	});
 
-	function doSomethingWithVideo() {
-		console.log("doing something with video");
+	function doSomethingWithVideo(buffer) {
+
+		console.log("doing something with video", buffer);
+
+		var blob = Util.arrayBufferToBlob(buffer);
+		var replayUrl = window.webkitURL.createObjectURL(blob);
+		console.log(replayUrl);
+
+		$("<video autoplay />").appendTo("body").attr("src", replayUrl);
 	};
 
 	$("#stop-record-vid").on('click', function (e) {
@@ -105,4 +118,5 @@ $(function() {
 
 		currentVid = [];
 	});
+*/
 });
