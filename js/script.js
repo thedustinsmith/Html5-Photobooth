@@ -1,6 +1,7 @@
 $(function() {
 
-	window.camera = new Camera({
+	$("body").addClass("video-mode");
+	window.camera = camera = new Camera({
 		container: $("#video-container")
 	});
 
@@ -24,10 +25,16 @@ $(function() {
 
 	$("#take-pic").on('click', function(e) {
 		e.preventDefault();
+		var btn = $(this);
+		if(btn.is(".disabled")) {
+			return;
+		}
 
+		btn.addClass('disabled');
 		counter.show();
 		countdown(3, function() {
 			counter.hide();
+			btn.removeClass('disabled');
 			camera.takePicture({}, function(picture) {
 				var picOpts = {
 					src: picture,
@@ -38,6 +45,20 @@ $(function() {
 		})
 	});
 
+	$("#filter-selector").on('click', 'button', function() {
+		console.log($(this).data('filter'));
+		var filter = Filters[$(this).data('filter')];
+		
+		camera.applyFilter(Filters[$(this).data("filter")]);
+	});		
+
+
+	$("#pic-holder,#video-container").on('click', function(ev) {
+		var isAlbumMode = $("body").is(".album-mode") && $(ev.target).closest('#video-container').length > 0;
+		var isVideoMode = $("body").is(".video-mode") && $(ev.target).closest("#pic-holder").length > 0;
+
+		$("body").toggleClass('video-mode', !isVideoMode).toggleClass('album-mode', !isAlbumMode);
+	});
 
 	/* Video stuff 
 	* I have it taking pictures for frames, and then I'm getting blobs from those data urls

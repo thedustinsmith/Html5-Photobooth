@@ -50,7 +50,8 @@ var Camera = function(opts){
 	var refreshRate = $("#refresh-rate");
 	var debugMirror = $("#debug-mirror");
 	var paused = false;
-	var first = true;
+	var currentFilter;
+
 	var updateCallback = function () {
 		if (paused || videoElement.paused || videoElement.ended) {
 			return;
@@ -59,28 +60,29 @@ var Camera = function(opts){
 		refreshRate.html(Date.now() - last);
 		last = Date.now();
 
-		if(!first) {
-			videoContext.save();
-		}
-
-		if (options.mirror) {
+		/*if (options.mirror) {
 			debugMirror.html("yep");
 			videoContext.scale(-1, 1);
 			videoContext.translate(-1 * videoElement.width, 0);
 		}
 		else {
 			debugMirror.html("nope");
-		}
+		}*/
+
+
 		videoContext.drawImage(videoElement, 0, 0);
-		videoContext.restore();
-		first = false;
+
+		if (currentFilter) {
+			var filterData = currentFilter(videoContext.getImageData(0, 0, videoCanvas.width, videoCanvas.height));
+			videoContext.putImageData(filterData, 0, 0);
+		}
+
 		setTimeout(function() {
 			updateCallback();
 		}, 0);
 	};
 
 	navigator.getUserMedia({video: true, audio: false}, function(sourceStream) {
-		sourceStream;
 		$(videoElement).attr("src", window.URL.createObjectURL(sourceStream));
 		//options.onInit(sourceStream);
 	}, function(e) {
@@ -93,7 +95,14 @@ var Camera = function(opts){
 	});
 
 	this.takePicture = function (filter, callback) {
-		callback(videoCanvas.toDataURL('image/png'));
+		videoCanvas.toBlob(function(blob) {
+			var objectUrl = window.URL.createObjectURL(blob);
+			callback(objectUrl);
+		});
+	};
+
+	this.applyFilter = function(filter) {
+		currentFilter = filter;
 	};
 
 	this.setOption = function (option, value) {
@@ -106,7 +115,7 @@ var Camera = function(opts){
 
 	this.play = function() {
 		paused = false;
-	}
+	};
 
 	return this;
 };

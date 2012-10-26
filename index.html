@@ -4,6 +4,7 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/0.5.2/lodash.min.js"></script>
 <title>My Camera</title>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 <script src="js/plugins.js"></script>
 <script src="js/filer.js"></script>
 <script src="js/camera.js"></script>
@@ -18,8 +19,8 @@
       <div class="container">
         <h2 class="brand">Html5 Photobooth</h1>
 
-        <a id="record-vid" class="btn btn-success pull-right">Start Recording</a>
-        <a id="stop-record-vid" class="btn btn-danger pull-right">Stop Recording</a>
+        <a id="record-vid" class="btn btn-success pull-right hide">Start Recording</a>
+        <a id="stop-record-vid" class="btn btn-danger pull-right hide">Stop Recording</a>
 
         <a id="take-pic" class="btn btn-primary pull-right">Take Picture</a>
       </div>
@@ -27,30 +28,33 @@
   </div>
 
   <div class="container" id="main">
-    <div class="span6">
+    <div id="filter-wrapper" class="span2" style="margin-left:0px;">
+      <div id="filter-selector" class="btn-group btn-group-vertical" data-toggle="buttons-radio">
+        <button type="button" class='btn active'>None</button>
+        <button type="button" class='btn' data-filter="grayscale">Grayscale</button>
+      </div>
+    </div>
+    <div class="span10">
       <div id="video-container">
         <div id="counter">
 
         </div>
       </div>
-    </div>
-    <div class="span6">
-      <div id="pic-holder"></div>
+
+      <div id="pic-holder" class="pull-right">
+      </div>
     </div>
   </div>
-  <div class="container">
-    <table>
-      <tr>
-        <th>Refresh Rate:</th>
-        <td id="refresh-rate"><td>
-      </tr>
-      <tr>
-        <th>Mirroing:</th>
-        <td id="debug-mirror"><td>
-      </tr>
-    </table>
-  </div>
 
-
+<table class="hide">
+  <tr>
+    <th>Refresh Rate:</th>
+    <td id="refresh-rate"><td>
+  </tr>
+  <tr>
+    <th>Mirroing:</th>
+    <td id="debug-mirror"><td>
+  </tr>
+</table>
 </body>
 </html>
