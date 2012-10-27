@@ -22,29 +22,43 @@
         <a id="record-vid" class="btn btn-success pull-right hide">Start Recording</a>
         <a id="stop-record-vid" class="btn btn-danger pull-right hide">Stop Recording</a>
 
-        <a id="take-pic" class="btn btn-primary pull-right">Take Picture</a>
+        <a id="filter-toggle" class="btn pull-right">Filters</a>
+        <a id="take-pic" data-toggle="button" class="btn btn-primary pull-right">Take Picture</a>
       </div>
     </div>
   </div>
 
-  <div class="container" id="main">
-    <div id="filter-wrapper" class="span2" style="margin-left:0px;">
-      <div id="filter-selector" class="btn-group btn-group-vertical" data-toggle="buttons-radio">
-        <button type="button" class='btn active'>None</button>
-        <button type="button" class='btn' data-filter="grayscale">Grayscale</button>
-      </div>
-    </div>
-    <div class="span10">
-      <div id="video-container">
-        <div id="counter">
-
+  <div class="container" id="body-wrap">
+    <div id="filter-wrapper" class="container collapsed">
+      <div class='offset1 span5'>
+        <div class="control">
+            <label>Filter:</label>
+            <select id="filter-control">
+              <option value="">None</option>
+              <option value="grayscale">Grayscale</option>
+              <option value="brightness">Brightness</option>
+            </select>
         </div>
       </div>
+      <div class='span5'>
+        <div class="control" id="filter-value-wrap">
+            <label>Filter Value:</label>
+            <input type="range" id="filter-value-control" />
+        </div>
+      </div>
+    </div>
 
-      <div id="pic-holder" class="pull-right">
+    <div class="container" id="main">
+      <div class="span10">
+        <div id="video-container">
+          <div id="counter"></div>
+        </div>  
+        <div id="pic-holder" class="pull-right"></div>
       </div>
     </div>
   </div>
+
+  
 
 <table class="hide">
   <tr>
@@ -56,5 +70,12 @@
     <td id="debug-mirror"><td>
   </tr>
 </table>
+
+<!-- 
+<div id="filter-selector" class="btn-group btn-group-vertical" data-toggle="buttons-radio">
+  <button type="button" class='btn active'>None</button>
+  <button type="button" class='btn' data-filter="grayscale">Grayscale</button>
+</div>
+    -->
 </body>
 </html>

@@ -45,13 +45,41 @@ $(function() {
 		})
 	});
 
-	$("#filter-selector").on('click', 'button', function() {
-		console.log($(this).data('filter'));
-		var filter = Filters[$(this).data('filter')];
-		
-		camera.applyFilter(Filters[$(this).data("filter")]);
-	});		
+	function applyFilter (filterVal) {
+		camera.applyFilter(currentFilter.filter, filterVal);
+	}
 
+	var filterControl = $("#filter-control"),
+		filterValueWrap = $("#filter-value-wrap").hide(),
+		filterValueControl = $("#filter-value-control"),
+		currentFilter = {};
+
+	filterControl.on('change', function() {
+		var filterType = $(this).val(),
+			filter = Filters[filterType] || {},
+			hasValue = filter.hasValue || false,
+			filterValue;
+
+		currentFilter = filter;
+
+		filterValueWrap.toggle(hasValue);
+		if (hasValue) {
+			filterValueControl.attr("min", currentFilter.min);
+			filterValueControl.attr("max", currentFilter.max);
+			filterValueControl.val(currentFilter.defaultValue);
+			filterValue = currentFilter.defaultValue;
+		}
+		applyFilter(filterValue);
+	});
+
+	filterValueControl.on('change', function(e) {
+		applyFilter(parseInt(this.value, 10));
+	});
+
+	$("#filter-toggle").on('click', function(e){
+		e.preventDefault();
+		$("#filter-wrapper").toggleClass("collapsed");
+	});
 
 	$("#pic-holder,#video-container").on('click', function(ev) {
 		var isAlbumMode = $("body").is(".album-mode") && $(ev.target).closest('#video-container').length > 0;

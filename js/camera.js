@@ -51,6 +51,7 @@ var Camera = function(opts){
 	var debugMirror = $("#debug-mirror");
 	var paused = false;
 	var currentFilter;
+	var currentFilterArgs;
 
 	var updateCallback = function () {
 		if (paused || videoElement.paused || videoElement.ended) {
@@ -73,7 +74,7 @@ var Camera = function(opts){
 		videoContext.drawImage(videoElement, 0, 0);
 
 		if (currentFilter) {
-			var filterData = currentFilter(videoContext.getImageData(0, 0, videoCanvas.width, videoCanvas.height));
+			var filterData = currentFilter(videoContext.getImageData(0, 0, videoCanvas.width, videoCanvas.height), currentFilterArgs);
 			videoContext.putImageData(filterData, 0, 0);
 		}
 
@@ -101,8 +102,9 @@ var Camera = function(opts){
 		});
 	};
 
-	this.applyFilter = function(filter) {
+	this.applyFilter = function(filter, filterArgs) {
 		currentFilter = filter;
+		currentFilterArgs = filterArgs;
 	};
 
 	this.setOption = function (option, value) {

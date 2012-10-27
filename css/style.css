@@ -1,5 +1,6 @@
 body {
-  background-color: #eee;  
+  background-color: #eee;
+  padding-top:40px;
 }
 .hide {
   display: none;
@@ -9,7 +10,6 @@ body {
   margin: 0;
 }
 #main {
-  margin-top:50px;
 }
 #counter {
   font-size:100px;
@@ -21,8 +21,26 @@ body {
   top:0; bottom: 0; left: 0; right: 0;
 }
 
+#filter-wrapper {
+  margin:0;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 25px 0;
+  color: #eee;
+  box-shadow: inset 0 -5px 20px #222;
+  transition: margin linear 250ms;
+  -webkit-transition: margin linear 250ms;
+  -moz-transition: margin linear 250ms;
+  -o-transition: margin linear 250ms;
+  -ms-transition: margin linear 250ms;
+}
+
+#filter-wrapper.collapsed { 
+  margin-top: -125px;
+  margin-bottom:10px;
+}
+
 #filter-selector {
-  display:block;
+
 }
 #video-container { 
   box-shadow: 0 0 20px #111;
