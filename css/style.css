@@ -26,17 +26,26 @@ body {
   background-color: rgba(0, 0, 0, 0.7);
   padding: 25px 0;
   color: #eee;
-  box-shadow: inset 0 -5px 20px #222;
-  transition: margin linear 250ms;
-  -webkit-transition: margin linear 250ms;
-  -moz-transition: margin linear 250ms;
-  -o-transition: margin linear 250ms;
-  -ms-transition: margin linear 250ms;
+  box-shadow: inset 20px 0 20px #222;
+  position:absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 250px;
+  padding: 75px 0 0 30px;
+  transition: right linear 250ms;
+  -webkit-transition: right linear 250ms;
+  -moz-transition: right linear 250ms;
+  -o-transition: right linear 250ms;
+  -ms-transition: right linear 250ms;
 }
 
 #filter-wrapper.collapsed { 
-  margin-top: -125px;
-  margin-bottom:10px;
+  right: -300px;
+}
+
+#filter-value-table label { 
+  display: block;
 }
 
 #filter-selector {

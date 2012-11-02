@@ -61,20 +61,11 @@ var Camera = function(opts){
 		refreshRate.html(Date.now() - last);
 		last = Date.now();
 
-		/*if (options.mirror) {
-			debugMirror.html("yep");
-			videoContext.scale(-1, 1);
-			videoContext.translate(-1 * videoElement.width, 0);
-		}
-		else {
-			debugMirror.html("nope");
-		}*/
-
-
 		videoContext.drawImage(videoElement, 0, 0);
 
 		if (currentFilter) {
-			var filterData = currentFilter(videoContext.getImageData(0, 0, videoCanvas.width, videoCanvas.height), currentFilterArgs);
+			var vidData = videoContext.getImageData(0, 0, videoCanvas.width, videoCanvas.height);
+			var filterData = currentFilter(vidData, currentFilterArgs);
 			videoContext.putImageData(filterData, 0, 0);
 		}
 

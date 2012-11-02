@@ -1,17 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/0.5.2/lodash.min.js"></script>
-<title>My Camera</title>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/plugins.js"></script>
-<script src="js/filer.js"></script>
-<script src="js/camera.js"></script>
-<script src="js/filters.js"></script>
-<script src="js/script.js"></script>
-<link rel="Stylesheet" href="css/bootstrap.css" />
-<link rel="Stylesheet" href="css/style.css" />
+  <title>My Camera</title>
+  <link rel="Stylesheet" href="css/bootstrap.css" />
+  <link rel="Stylesheet" href="css/style.css" />
 </head>
 <body>
   <div class="navbar navbar-inverse navbar-fixed-top">
@@ -29,25 +21,6 @@
   </div>
 
   <div class="container" id="body-wrap">
-    <div id="filter-wrapper" class="container collapsed">
-      <div class='offset1 span5'>
-        <div class="control">
-            <label>Filter:</label>
-            <select id="filter-control">
-              <option value="">None</option>
-              <option value="grayscale">Grayscale</option>
-              <option value="brightness">Brightness</option>
-            </select>
-        </div>
-      </div>
-      <div class='span5'>
-        <div class="control" id="filter-value-wrap">
-            <label>Filter Value:</label>
-            <input type="range" id="filter-value-control" />
-        </div>
-      </div>
-    </div>
-
     <div class="container" id="main">
       <div class="span10">
         <div id="video-container">
@@ -56,6 +29,17 @@
         <div id="pic-holder" class="pull-right"></div>
       </div>
     </div>
+  </div>
+
+  <div id="filter-wrapper" class="container collapsed">
+    <table>
+      <tr>
+        <td>Filter:<select id="filter-type"></select></td>
+      </tr>
+    </table>
+    <table id="filter-value-table">
+
+    </table>
   </div>
 
   
@@ -77,5 +61,15 @@
   <button type="button" class='btn' data-filter="grayscale">Grayscale</button>
 </div>
     -->
+
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/0.5.2/lodash.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/plugins.js"></script>
+  <script src="js/pixastic.custom.js"></script>
+  <script src="js/camera.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/filterView.js"></script>
+  <script src="js/script.js"></script>
 </body>
 </html>

@@ -1,16 +1,14 @@
 $(function() {
-
-	$("body").addClass("video-mode");
-	window.camera = camera = new Camera({
-		container: $("#video-container")
-	});
-
-
 	var pictureHolder = $("#pic-holder"),
-  		picTemplate = "<div class='pic-wrap' style='-webkit-transform:rotate(<%- rotate %>deg);'><img src='<%- src %>' /></div>";
+		counter = $("#counter"),
+		picTemplate = "<div class='pic-wrap' style='-webkit-transform:rotate(<%- rotate %>deg);'><img src='<%- src %>' /></div>";
 
-	var counter = $("#counter");
-	function countdown (count, callback) {
+	var filterControl = $("#filter-control");
+
+	window.currentFilter = currentFilter = $.noop;
+	window.currentFilterArgs = currentFilterArgs = {};
+
+	var countdown = function (count, callback) {
 		if (count === 0){
 			callback();
 			return;
@@ -22,6 +20,13 @@ $(function() {
 			countdown(count, callback);
 		}, 1000)
 	};
+	
+
+	$("body").addClass("video-mode");
+
+	window.camera = camera = new Camera({
+		container: $("#video-container")
+	});
 
 	$("#take-pic").on('click', function(e) {
 		e.preventDefault();
@@ -45,36 +50,9 @@ $(function() {
 		})
 	});
 
-	function applyFilter (filterVal) {
-		camera.applyFilter(currentFilter.filter, filterVal);
+	window.applyFilter = applyFilter = function () {
+		camera.applyFilter(currentFilter, currentFilterArgs);
 	}
-
-	var filterControl = $("#filter-control"),
-		filterValueWrap = $("#filter-value-wrap").hide(),
-		filterValueControl = $("#filter-value-control"),
-		currentFilter = {};
-
-	filterControl.on('change', function() {
-		var filterType = $(this).val(),
-			filter = Filters[filterType] || {},
-			hasValue = filter.hasValue || false,
-			filterValue;
-
-		currentFilter = filter;
-
-		filterValueWrap.toggle(hasValue);
-		if (hasValue) {
-			filterValueControl.attr("min", currentFilter.min);
-			filterValueControl.attr("max", currentFilter.max);
-			filterValueControl.val(currentFilter.defaultValue);
-			filterValue = currentFilter.defaultValue;
-		}
-		applyFilter(filterValue);
-	});
-
-	filterValueControl.on('change', function(e) {
-		applyFilter(parseInt(this.value, 10));
-	});
 
 	$("#filter-toggle").on('click', function(e){
 		e.preventDefault();
@@ -88,84 +66,15 @@ $(function() {
 		$("body").toggleClass('video-mode', !isVideoMode).toggleClass('album-mode', !isAlbumMode);
 	});
 
-	/* Video stuff 
-	* I have it taking pictures for frames, and then I'm getting blobs from those data urls
-	* I'm then trying to concatenate those blobs into a buffer, but apparently that's not going to work
-	*/
-	/*var currentVid = [];
-	var isRecording = false;
-	function record(frame) {
-		if (!isRecording) {
-			return;
-		}
-
-		currentVid.push(frame);
-		camera.takePicture({}, function(pic){
-			setTimeout(function() {
-				record(pic);
-			}, 0);
-		});
-	};
-
-	function convertImagesToVideo (frames, callback) {
-		var buffer = new Uint8Array(0);
-		var blobs = [];
-		var reader = new FileReader();
-		reader.onerror = function(er) {
-			console.log('error', er);
-		};
-		reader.onload = function(evt) {
-			console.log("loadthingy");
-		};
-		reader.onprogress = function(pro) {
-			console.log(pro);
-		};
-		reader.onloadend = function (bytes) {
-			console.log(bytes);
-		};
-
-		for(var frame in frames) {
-			var b = Util.dataURLToBlob(frames[frame]);
-
-			var isLast = frame === frames.length - 1;
-			Util.fileToArrayBuffer(b, function(h) {
-				buffer = buffer.concat(h);
-				//callback(buffer);
-			});
-		}
-
-		setTimeout(function() { callback(buffer) }, 5000);
-	};
-
-	$("#record-vid").on('click', function (e) {
-		$('body').toggleClass('recording');
-		isRecording = true;
-		camera.takePicture({}, function(pic) {
-			record(pic);
-		});
+	FilterView.initialize();
+	$(FilterView).on("filterChange", function(ev, filter) {
+		currentFilter = filter.process;
+		currentFilterArgs = {};
+		applyFilter();
 	});
 
-	function doSomethingWithVideo(buffer) {
-
-		console.log("doing something with video", buffer);
-
-		var blob = Util.arrayBufferToBlob(buffer);
-		var replayUrl = window.webkitURL.createObjectURL(blob);
-		console.log(replayUrl);
-
-		$("<video autoplay />").appendTo("body").attr("src", replayUrl);
-	};
-
-	$("#stop-record-vid").on('click', function (e) {
-		$('body').toggleClass('recording');
-		isRecording = false;
-		var vid = currentVid;
-
-		setTimeout(function() {
-			convertImagesToVideo(vid, doSomethingWithVideo);
-		}, 0);
-
-		currentVid = [];
+	$(FilterView).on("filterValueChange", function(ev, args) {
+		$.extend(currentFilterArgs, args);
+		applyFilter();
 	});
-*/
 });
